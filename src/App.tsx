@@ -1,23 +1,34 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import WeeklyNews from "@/pages/WeeklyNews";
+import { lazy, Suspense } from "react";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 
+// Non-landing routes are code-split so the initial bundle stays small.
+const WeeklyNews = lazy(() => import("@/pages/WeeklyNews"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+
 function Router() {
   // make sure to consider if you need authentication for certain routes
   // WeeklyNews is public and accessible to all users
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/weekly-news"} component={WeeklyNews} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center text-slate-500">
+          Loading…
+        </div>
+      }
+    >
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path={"/weekly-news"} component={WeeklyNews} />
+        <Route path={"/404"} component={NotFound} />
+        {/* Final fallback route */}
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
