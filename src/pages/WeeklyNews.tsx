@@ -1,25 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Globe, Calendar, Tag, TrendingUp, Newspaper } from "lucide-react";
+import { ArrowLeft, ArrowRight, Globe, Tag, TrendingUp, Newspaper } from "lucide-react";
 
 interface NewsItem {
   id: number;
   title: string;
   description: string;
-  content?: string;
   source: string;
   sourceUrl: string;
   category: string;
   region: string;
   englishLevel: "Beginner" | "Intermediate" | "Advanced";
-  imageUrl?: string;
-  publishedAt: string;
-  weekNumber: number;
-  year: number;
 }
 
-const mockWeeklyNews: NewsItem[] = [
+const sampleReadingTopics: NewsItem[] = [
   {
     id: 1,
     title: "Global Climate Summit Reaches Historic Agreement on Carbon Emissions",
@@ -28,10 +24,7 @@ const mockWeeklyNews: NewsItem[] = [
     sourceUrl: "https://www.bbc.com/news",
     category: "Environment",
     region: "Global",
-    englishLevel: "Advanced",
-    publishedAt: new Date().toISOString(),
-    weekNumber: 18,
-    year: 2026
+    englishLevel: "Advanced"
   },
   {
     id: 2,
@@ -41,10 +34,7 @@ const mockWeeklyNews: NewsItem[] = [
     sourceUrl: "https://www.reuters.com/",
     category: "Technology",
     region: "Global",
-    englishLevel: "Intermediate",
-    publishedAt: new Date().toISOString(),
-    weekNumber: 18,
-    year: 2026
+    englishLevel: "Intermediate"
   },
   {
     id: 3,
@@ -54,10 +44,7 @@ const mockWeeklyNews: NewsItem[] = [
     sourceUrl: "https://www.ft.com/",
     category: "Economics",
     region: "Europe",
-    englishLevel: "Advanced",
-    publishedAt: new Date().toISOString(),
-    weekNumber: 18,
-    year: 2026
+    englishLevel: "Advanced"
   },
   {
     id: 4,
@@ -67,10 +54,7 @@ const mockWeeklyNews: NewsItem[] = [
     sourceUrl: "https://www.nature.com/",
     category: "Science",
     region: "Global",
-    englishLevel: "Advanced",
-    publishedAt: new Date().toISOString(),
-    weekNumber: 18,
-    year: 2026
+    englishLevel: "Advanced"
   },
   {
     id: 5,
@@ -80,10 +64,7 @@ const mockWeeklyNews: NewsItem[] = [
     sourceUrl: "https://www.reuters.com/",
     category: "Business",
     region: "Asia",
-    englishLevel: "Intermediate",
-    publishedAt: new Date().toISOString(),
-    weekNumber: 18,
-    year: 2026
+    englishLevel: "Intermediate"
   },
   {
     id: 6,
@@ -93,10 +74,7 @@ const mockWeeklyNews: NewsItem[] = [
     sourceUrl: "https://apnews.com/",
     category: "Science",
     region: "Global",
-    englishLevel: "Intermediate",
-    publishedAt: new Date().toISOString(),
-    weekNumber: 18,
-    year: 2026
+    englishLevel: "Intermediate"
   }
 ];
 
@@ -124,16 +102,21 @@ const levelColors: Record<string, string> = {
 };
 
 export default function WeeklyNews() {
-  const [news, setNews] = useState<NewsItem[]>(mockWeeklyNews);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedRegion, setSelectedRegion] = useState<string>("All");
   const [selectedLevel, setSelectedLevel] = useState<string>("All");
 
-  const categories = ["All", ...Array.from(new Set(mockWeeklyNews.map(n => n.category)))];
-  const regions = ["All", ...Array.from(new Set(mockWeeklyNews.map(n => n.region)))];
+  const categories = ["All", ...Array.from(new Set(sampleReadingTopics.map(n => n.category)))];
+  const regions = ["All", ...Array.from(new Set(sampleReadingTopics.map(n => n.region)))];
   const levels = ["All", "Beginner", "Intermediate", "Advanced"];
 
-  const filteredNews = news.filter(item => {
+  const resetFilters = () => {
+    setSelectedCategory("All");
+    setSelectedRegion("All");
+    setSelectedLevel("All");
+  };
+
+  const filteredNews = sampleReadingTopics.filter(item => {
     const categoryMatch = selectedCategory === "All" || item.category === selectedCategory;
     const regionMatch = selectedRegion === "All" || item.region === selectedRegion;
     const levelMatch = selectedLevel === "All" || item.englishLevel === selectedLevel;
@@ -145,6 +128,12 @@ export default function WeeklyNews() {
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/50 backdrop-blur-md sticky top-0 z-40">
         <div className="container mx-auto px-4 py-8">
+          <Button variant="outline" asChild className="mb-5">
+            <Link href="/">
+              <ArrowLeft className="h-4 w-4" />
+              Back to study resources
+            </Link>
+          </Button>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center">
               <Newspaper className="w-6 h-6 text-white" />
@@ -152,7 +141,7 @@ export default function WeeklyNews() {
             <h1 className="text-3xl font-bold text-slate-900">Weekly International News</h1>
           </div>
           <p className="text-slate-600">
-            每周精选国际重点新闻 | Curated global news stories with English learning focus
+            国际阅读练习示例 | Sample reading topics for English learners
           </p>
         </div>
       </header>
@@ -162,7 +151,8 @@ export default function WeeklyNews() {
         {/* Info Banner */}
         <Card className="mb-8 p-6 bg-amber-50 border-2 border-amber-200">
           <p className="text-slate-700 text-sm">
-            <strong>📰 每周新闻特色：</strong> 我们精选来自BBC、Reuters、Financial Times等权威媒体的国际重点新闻，并按难度级别、地区和主题分类，帮助您在学习雅思的同时了解全球动态。所有新闻都标注了英文难度等级，方便您选择适合的学习材料。
+            <strong>示例内容 / Demo content:</strong> These fictional reading topics demonstrate the filters; they are not live news or reports from the linked publishers. Links open publisher homepages for further reading.
+            <span className="mt-2 block">本页为阅读主题示例，未接入实时新闻或自动更新。示例标题不代表所列媒体的真实报道；链接仅用于访问媒体网站。</span>
           </p>
         </Card>
 
@@ -174,6 +164,8 @@ export default function WeeklyNews() {
               {categories.map(cat => (
                 <button
                   key={cat}
+                  type="button"
+                  aria-pressed={selectedCategory === cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     selectedCategory === cat
@@ -193,6 +185,8 @@ export default function WeeklyNews() {
               {regions.map(region => (
                 <button
                   key={region}
+                  type="button"
+                  aria-pressed={selectedRegion === region}
                   onClick={() => setSelectedRegion(region)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     selectedRegion === region
@@ -212,6 +206,8 @@ export default function WeeklyNews() {
               {levels.map(level => (
                 <button
                   key={level}
+                  type="button"
+                  aria-pressed={selectedLevel === level}
                   onClick={() => setSelectedLevel(level)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     selectedLevel === level
@@ -224,6 +220,15 @@ export default function WeeklyNews() {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <p role="status" className="text-sm text-slate-600">
+            {filteredNews.length} of {sampleReadingTopics.length} sample reading topics
+          </p>
+          <Button variant="outline" onClick={resetFilters}>
+            Reset filters
+          </Button>
         </div>
 
         {/* News Grid */}
@@ -265,11 +270,10 @@ export default function WeeklyNews() {
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-200">
                     <span className="flex items-center gap-1">
                       <Newspaper className="w-3 h-3" />
-                      {item.source}
+                      Explore {item.source}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      Week {item.weekNumber}
+                      Sample topic
                     </span>
                   </div>
                 </Card>
@@ -280,7 +284,7 @@ export default function WeeklyNews() {
 
         {filteredNews.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-slate-600 text-lg">No news found matching your filters. Try adjusting your selection.</p>
+            <p className="text-slate-600 text-lg">No sample topics match your filters. Use Reset filters to see all topics.</p>
           </div>
         )}
 
@@ -290,20 +294,20 @@ export default function WeeklyNews() {
             <Card className="p-6 bg-blue-50 border-2 border-blue-200">
               <div className="flex items-center gap-3 mb-3">
                 <TrendingUp className="w-6 h-6 text-blue-600" />
-                <h3 className="font-bold text-slate-900">更新频率</h3>
+                <h3 className="font-bold text-slate-900">内容说明</h3>
               </div>
               <p className="text-sm text-slate-700">
-                每周一自动更新最新国际重点新闻，确保您始终获得最新的全球动态。
+                当前版本展示固定的阅读主题示例，不会自动获取或更新新闻。
               </p>
             </Card>
 
             <Card className="p-6 bg-green-50 border-2 border-green-200">
               <div className="flex items-center gap-3 mb-3">
                 <Globe className="w-6 h-6 text-green-600" />
-                <h3 className="font-bold text-slate-900">权威来源</h3>
+                <h3 className="font-bold text-slate-900">延伸阅读</h3>
               </div>
               <p className="text-sm text-slate-700">
-                所有新闻来自BBC、Reuters、CFR等全球顶级媒体和智库，确保内容的准确性和权威性。
+                媒体链接通向各网站首页，方便自行查找原文。示例主题并非对应媒体的真实报道。
               </p>
             </Card>
 
@@ -313,7 +317,7 @@ export default function WeeklyNews() {
                 <h3 className="font-bold text-slate-900">学习价值</h3>
               </div>
               <p className="text-sm text-slate-700">
-                每条新闻都标注了英文难度级别，帮助您选择适合的学习材料，同时扩展词汇和知识面。
+                按主题、地区和建议难度选择阅读方向，再到媒体网站寻找适合的真实文章。
               </p>
             </Card>
           </div>
@@ -323,9 +327,9 @@ export default function WeeklyNews() {
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white/50 backdrop-blur-md mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-slate-600 text-sm">
-          <p>© 2025 IELTS Navigator | Weekly International News</p>
+          <p>© {new Date().getFullYear()} IELTS Navigator | Reading topic examples</p>
           <p className="mt-2">
-            News sources: 
+            Explore publishers:
             <a href="https://www.bbc.com/news" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-colors ml-1">
               BBC
             </a>

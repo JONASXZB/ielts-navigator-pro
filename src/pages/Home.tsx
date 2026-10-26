@@ -864,14 +864,14 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/50 backdrop-blur-md sticky top-0 z-40">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center">
                 <Zap className="w-6 h-6 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-slate-900">{t.title}</h1>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 onClick={() => setLocation("/weekly-news")}
                 className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white flex items-center gap-2"
@@ -882,6 +882,8 @@ export default function Home() {
               {(["en", "zh", "yue"] as const).map((lang) => (
                 <button
                   key={lang}
+                  type="button"
+                  aria-pressed={language === lang}
                   onClick={() => setLanguage(lang)}
                   className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                     language === lang
